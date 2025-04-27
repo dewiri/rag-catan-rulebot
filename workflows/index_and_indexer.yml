@@ -3,7 +3,7 @@ name: Build Catan Rule Index
 # Auslöser: bei jedem Push in main und manuell über GitHub UI
 on:
   push:
-    branches: [rag-catan-rulebot]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
