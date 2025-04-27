@@ -1,6 +1,5 @@
 name: Build Catan Rule Index
 
-# Auslöser: bei jedem Push in main und manuell über GitHub UI
 on:
   push:
     branches: [ main ]
@@ -13,6 +12,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -25,19 +27,17 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run preprocessing (PDF → chunks.json)
-        run: |
-          python src/app/preprocess.py
+        run: python src/app/preprocess.py
 
       - name: Build embeddings & FAISS index
-        run: |
-          python src/app/indexer.py
+        run: python src/app/indexer.py
 
       - name: Commit generated files
         uses: EndBug/add-and-commit@v9
         with:
           author_name: "github-actions[bot]"
           author_email: "github-actions[bot]@users.noreply.github.com"
-          message: "Auto-update chunks, metadata & FAISS index"
+          message: "💾 Auto-update chunks, metadata & FAISS index"
           add: |
             data/index/chunks.json
             data/index/metadata.json
